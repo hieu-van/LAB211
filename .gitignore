@@ -1,18 +1,8 @@
-# NetBeans specific #
-nbproject/private/
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
 build/
 nbbuild/
 dist/
 nbdist/
-nbactions.xml
-nb-configuration.xml
-
-# Class Files #
-*.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-/J1.S.P0071/nbproject/private/
+.nb-gradle/
