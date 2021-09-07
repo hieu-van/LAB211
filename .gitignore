@@ -14,3 +14,5 @@ nb-configuration.xml
 *.jar
 *.war
 *.ear
+
+/J1.S.P0071/nbproject/private/
