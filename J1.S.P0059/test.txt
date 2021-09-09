@@ -1,0 +1,3 @@
+John;Hanoi;45000
+Seth;Saigon;30000
+Kyle;Danang;10000
