@@ -1,8 +1,5 @@
 import java.util.Scanner;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDate;
 
 public class Main {
 	private static final Scanner in = new Scanner(System.in);
