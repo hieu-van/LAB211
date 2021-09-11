@@ -9,39 +9,6 @@ public class Main {
 	private static final Scanner in = new Scanner(System.in);
 	private static int choice;
 
-	private static ArrayList<Person> getPerson(String path, double t_money) {
-		ArrayList<Person> people = new ArrayList();
-
-		try (Stream<String> stream = Files.lines(Paths.get(path))) {
-			stream.forEach(line -> {
-				try {
-					String name = line.split(";")[0];
-					String addr = line.split(";")[1];
-					float money;
-
-					try {
-						money = Float.parseFloat(line.split(";")[2]);
-						if (money < 0)
-							throw new NumberFormatException();
-					} catch (NumberFormatException e) {
-						money = 0;
-					}
-
-					if (money >= t_money)
-						people.add(new Person(name, addr, money));
-				} catch (NullPointerException e) {
-					System.err.println("An invalid line was found and ignored.");
-				}
-			});
-		} catch (IOException e) {
-			System.err.println("Error reading file!");
-		}
-
-		people.sort(new PersonSorter());
-
-		return people;
-	}
-
 	private static void copyWordOneTimes(String src, String dest) {
 		try {
 			Files.copy(Paths.get(src), Paths.get(dest));
@@ -67,12 +34,12 @@ public class Main {
 						System.out.println("--------- Person info ---------");
 
 						System.out.print("Enter path: ");
-						String path = in.next();
+						String path = in.nextLine();
 
 						System.out.print("Enter money: ");
 						float money = in.nextFloat(); in.nextLine();
 
-						ArrayList<Person> result = getPerson(path, money);
+						ArrayList<Person> result = PersonController.getPerson(path, money);
 
 						if (! result.isEmpty()) {
 							System.out.println("------------- Result ----------");
@@ -84,10 +51,10 @@ public class Main {
 						break;
 					case 2:
 						System.out.print("Enter source: ");
-						String src = in.next();
+						String src = in.nextLine();
 
 						System.out.print("Enter destination: ");
-						String dest = in.next();
+						String dest = in.nextLine();
 
 						copyWordOneTimes(src, dest);
 

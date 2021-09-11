@@ -1,130 +1,147 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.HashMap;	// Hashtable đã lỗi thời, thay thế bằng HashMap
-import java.util.Map;
 
 public class Main {
 	private static final Scanner in = new Scanner(System.in);
 	private static int choice;
-	private static int id_c = 0;
+	private static String inp;
 
-	private static ArrayList<Fruit> fruits = new ArrayList();
-	// Trong HashMap đơn hàng, key là tên người mua, value là HashMap con
-	// có key là loại quả, value là số lượng muốn mua
-	private static HashMap<String,HashMap<Fruit,Integer>> orders = new HashMap();
+	// Các biến chứa dữ liệu
+	private static final FruitList fruits = new FruitList();
+	private static final OrderList orders = new OrderList();
 
-	private static void createFruit() {
-		System.out.print("Enter fruit name: ");
-		String name = in.nextLine();
+	private static void createFruitView() {
+		final FruitList new_fruits = new FruitList();
+		int p, q;
+		String o;
 
-		System.out.print("Enter fruit price: ");
-		int p = in.nextInt(); in.nextLine();
+		do {
+			System.out.print("\nEnter fruit name: ");
+			String name = in.nextLine();
 
-		System.out.print("Enter fruit quantity: ");
-		int q = in.nextInt(); in.nextLine();
+			System.out.print("Enter fruit price: ");
+			p = in.nextInt(); in.nextLine();
 
-		System.out.print("Enter origin of fruit: ");
-		String o = in.nextLine();
+			System.out.print("Enter fruit quantity: ");
+			q = in.nextInt(); in.nextLine();
 
-		id_c++;
-		fruits.add(new Fruit(id_c, name, p, q, o));
+			System.out.print("Enter origin of fruit: ");
+			o = in.nextLine();
 
-		System.out.println("Added new fruit.");
+			FruitListController.addFruitToList(new_fruits, name, p, q, o);
+
+			System.out.println("Added new fruit.");
+
+			input_loop: do {
+				System.out.print("\nDo you want to add another fruit (Y/N)? ");
+				inp = in.nextLine();
+
+				switch (inp) {
+					case "Y":
+						break input_loop;
+					case "N":
+						break input_loop;
+					default:
+						System.err.println("Please enter \"Y\" or \"N\".");
+				}
+			} while (true);
+		} while (inp.equals("Y"));
+
+		FruitListController.addNewFruits(fruits, new_fruits);
+		FruitListController.printNewlyCreated(new_fruits);
 	}
 
-	private static void updateFruit() {
+	private static void updateFruitView() {
 		Fruit target;
 
 		System.out.print("Enter fruit ID: ");
-		int id = in.nextInt();
-		in.nextLine();
+		int id = in.nextInt(); in.nextLine();
 
-		target = fruits.stream().filter(f -> (id == f.id)).findFirst().orElse(null);
+		target = FruitListController.findById(fruits, id);
+
 		if (target != null) {
 			System.out.print("Enter new quantity of this fruit: ");
 			int new_q = in.nextInt(); in.nextLine();
 
-			target.quantity = new_q;
+			FruitController.update(target, new_q);
 
 			System.out.println("Fruit updated.");
 		} else {
 			System.out.println("No fruit with such ID found.");
 
-			add_fruit_loop_2: do {
+			add_fruit_loop: do {
 				System.out.print("Do you want to create a new one (Yes/No)? ");
-				String inp = in.next();
+				inp = in.nextLine();
 
 				switch (inp) {
 					case "Yes":
-						createFruit();
-						break;
+						createFruitView();
+						break add_fruit_loop;
 					case "No":
-						break add_fruit_loop_2;
+						break add_fruit_loop;
 					default:
-						System.out.println("Please enter \"Yes\" or \"No\".");
+						System.err.println("Please enter \"Yes\" or \"No\".");
 				}
 			} while (true);
 		}
 	}
 
 	private static void viewOrders() {
-		if (orders.isEmpty()) {
-			System.out.println("No orders.");
-			return;
-		}
-
-		orders.forEach((customer, items) -> {
-			System.out.println("Customer: " + customer);
-			System.out.println("Product\tQuantity\tPrice\tAmount");
-
-			int index = 0, total = 0;
-			for (Map.Entry<Fruit,Integer> e : items.entrySet()) {
-				Fruit f = e.getKey();
-				int q = e.getValue();
-				total += (f.price * q);
-
-				System.out.printf("%d. %s\t%d\t%d$\t%d$", (index++), f.name, q, f.price, (f.price * q));
-			}
-
-			System.out.println("Total: " + total + "$");
-		});
+		OrderListController.printAll(orders);
 	}
 
-	private static void shop() {
-		HashMap<Fruit,Integer> cart = new HashMap();
+	private static void shopView() {
+		Order new_order = new Order();
+		int q;
+		String rep;
 
 		pick_fruit: do {
-			System.out.println("List of fruits:\nItem\tFruit name\tOrigin\tPrice");
-			fruits.forEach(f -> System.out.printf("%d\t%s\t%s\t%d$\n", f.id, f.name, f.origin, f.price));
+			select_by_id: do {
+				System.out.print("\nSelect a fruit by ID: ");
+				int id = in.nextInt(); in.nextLine();
 
-			System.out.print("\nSelect a fruit by ID: ");
-			int id = in.nextInt(); in.nextLine();
-			Fruit target = fruits.stream().filter(f -> (id == f.id)).findFirst().get();
+				Fruit target = FruitListController.findById(fruits, id);
 
-			System.out.println("You selected: " + target.name);
-			System.out.print("Enter quantity: ");
-			int q = in.nextInt(); in.nextLine();
+				if (target != null) {
+					System.out.println("You selected: " + target.name);
 
-			cart.put(target, q);
+					if (target.quantity > 0) {
+						do {
+							System.out.print("Enter quantity: ");
+							q = in.nextInt(); in.nextLine();
 
-			System.out.print("Do you want to check out (Y/N)? ");
-			String r = in.next();
+							if (OrderController.addItem(new_order, target, q)) {
+								break select_by_id;
+							} else {
+								System.out.println("Sorry, the quantity you requested is out of availability (" + target.quantity + ").");
+							}
+						} while (true);
+					} else
+						System.out.println("Sorry, this item is out of stock.");
+				} else {
+					System.out.println("No product with such ID found.");
+				}
+			} while (true);
 
-			switch (r) {
-				case "N":
-					System.out.println();
-					shop();
-					break;
-				case "Y":
-					break pick_fruit;
-			}
+			input_loop: do {
+				System.out.print("Do you want to check out (Y/N)? ");
+				rep = in.nextLine();
+
+				switch (rep) {
+					case "Y":
+						break pick_fruit;
+					case "N":
+						break input_loop;
+					default:
+						System.err.println("Please enter \"Y\" or \"N\".");
+				}
+			} while (true);
 		} while (true);
 
-		System.out.print("Please enter your name: ");
+		System.out.print("\nPlease enter your name: ");
 		String c_name = in.nextLine();
 
-		orders.put(c_name, cart);
+		OrderListController.addOrder(orders, c_name, new_order);
 
 		System.out.println("Order placed.");
 	}
@@ -145,43 +162,24 @@ public class Main {
 
 				switch (choice) {
 					case 1:
-						createFruit();
-
-						add_fruit_loop: do {
-							System.out.print("Do you want to add another fruit (Y/N)? ");
-							String inp = in.next();
-
-							switch (inp) {
-								case "Y":
-									createFruit();
-									break;
-								case "N":
-									break add_fruit_loop;
-								default:
-									System.out.println("Please enter \"Y\" or \"N\".");
-							}
-						} while (true);
-
-						System.out.println("\nList of fruits created:\nID\tName\tPrice\tQuantity\tOrigin");
-						fruits.forEach(f -> System.out.printf("%d\t%s\t%d$\t%d\t%s\n", f.id, f.name, f.price, f.quantity, f.origin));
-
+						createFruitView();
 						break;
 					case 2:
-						updateFruit();
+						updateFruitView();
 						break;
 					case 3:
 						viewOrders();
 						break;
 					case 4:
-						shop();
+						shopView();
 						break;
 					case 5:
 						System.exit(0);
 					default:
-						System.out.println("No operation with that number found. Please enter again.");
+						System.err.println("No operation with that number found. Please enter again.");
 				}
 			} catch (NullPointerException | NumberFormatException | InputMismatchException e) {
-				System.out.println("Invalid input. Please enter again.");
+				System.err.println("Invalid input. Please enter again.");
 				in.nextLine();
 			}
 		} while (true);

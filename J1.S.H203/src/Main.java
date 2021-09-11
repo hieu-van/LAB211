@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class Main {
-	private static Scanner in = new Scanner(System.in);
+	private static final Scanner in = new Scanner(System.in);
 	private static String inp;
 
 	private static void printReverse(String s) {
@@ -20,7 +20,7 @@ public class Main {
 			inp = in.nextLine();
 
 			if (inp.equals("")) {
-				System.err.println("Please enter a string.");
+				System.err.println("Please enter a string.\n");
 			} else {
 				break;
 			}

@@ -2,7 +2,6 @@ import java.util.TreeMap;
 import java.time.LocalDate;
 
 public class Task {
-
 	private static final TreeMap<Integer,String> typeMap = new TreeMap();
 
 	public int id, type;

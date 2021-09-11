@@ -7,30 +7,51 @@ import java.time.LocalDate;
 public class Main {
 	private static final Scanner in = new Scanner(System.in);
 	private static int choice;
-	private static int id_current = 0;
-	private static ArrayList<Task> tasks = new ArrayList();
+	private static String inp;
+	private static final TaskList tasks = new TaskList();
 
-	private static void addTask() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M-d-yyyy");
+	private static void addTaskView() {
+		int type;
+		String req, date_str;
+		float from, to;
 
-		System.out.print("Enter task type ID: ");
-		int type = in.nextInt();
-		in.nextLine();
+		do {
+			try {
+				System.out.print("Enter task type ID: ");
+				type = in.nextInt();
+				break;
+			} catch (InputMismatchException e) {
+				System.err.println("Invalid number!");
+			}
+			in.nextLine();
+		} while (true);
 
 		System.out.print("Enter requirement name: ");
-		String req = in.nextLine();
+		req = in.nextLine();
 
 		System.out.print("Enter date (M-d-yyyy): ");
-		String date_str = in.nextLine();
-		LocalDate date = LocalDate.parse(date_str, formatter);
+		date_str = in.nextLine();
 
-		System.out.print("Plan from: ");
-		float from = in.nextFloat();
-		in.nextLine();
+		do {
+			try {
+				System.out.print("Plan from: ");
+				from = in.nextFloat();
+				break;
+			} catch (InputMismatchException e) {
+				System.err.println("Invalid number!");
+			}
+			in.nextLine();
+		} while (true);
 
-		System.out.print("Plan to: ");
-		float to = in.nextFloat();
-		in.nextLine();
+		do {
+			try {
+				System.out.print("Plan to: ");
+				to = in.nextFloat(); in.nextLine();
+				break;
+			} catch (InputMismatchException e) {
+				System.err.println("Invalid number!");
+			}
+		} while (true);
 
 		System.out.print("Enter assignee: ");
 		String a = in.nextLine();
@@ -38,27 +59,17 @@ public class Main {
 		System.out.print("Enter reviewer: ");
 		String r = in.nextLine();
 
-		id_current++;
-		tasks.add(new Task(id_current, type, req, date, from, to, a, r));
+		TaskListController.addTask(tasks, type, req, date_str, from, to, a, r);
 
 		System.out.println("Added new task.");
 	}
 
 	private static void showTasks() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-		System.out.println("---------------------------- Task (in descending order) ----------------------------");
-		System.out.println("ID\tName\tTask Type\tDate\tTime\tAssignee\tReviewer");
-
-		tasks.forEach(t -> {
-			System.out.printf("%d\t%s\t%s\t%s\t%.1f\t%s\t%s\n", t.id, t.req_name, t.getTaskType(), t.date.format(formatter), (t.to - t.from), t.assignee, t.reviewer);
-		});
+		TaskListController.printAll(tasks);
 	}
 
-	private static void updateTask() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M-d-yyyy");
+	private static void updateTaskView() {
 		Task target;
-		String inp;
 
 		do {
 			System.out.print("Enter task ID: ");
@@ -69,73 +80,54 @@ public class Main {
 			if (target != null) {
 				break;
 			} else {
-				System.out.println("No task with such ID found.");
+				System.err.println("No task with such ID found.");
 			}
 		} while (true);
 
-		try {
-			System.out.print("Enter task type ID: ");
-			inp = in.nextLine();
-			if (! "nope".equals(inp))
-				target.type = Integer.parseInt(inp);
+		String inp1, inp2, inp3, inp4, inp5, inp6, inp7;
 
-			System.out.print("Enter requirement name: ");
-			inp = in.nextLine();
-			if (! "nope".equals(inp))
-				target.req_name = inp;
+		System.out.print("Enter task type ID: ");
+		inp1 = in.nextLine();
 
-			System.out.print("Enter date (M-d-yyyy): ");
-			inp = in.nextLine();
-			if (! "nope".equals(inp))
-				target.date = LocalDate.parse(inp, formatter);
+		System.out.print("Enter requirement name: ");
+		inp2 = in.nextLine();
 
-			System.out.print("Plan from: ");
-			inp = in.nextLine();
-			if (! "nope".equals(inp))
-				target.from = Float.parseFloat(inp);
+		System.out.print("Enter date (M-d-yyyy): ");
+		inp3 = in.nextLine();
 
-			System.out.print("Plan to: ");
-			inp = in.nextLine();
-			if (! "nope".equals(inp))
-				target.to = Float.parseFloat(inp);
+		System.out.print("Plan from: ");
+		inp4 = in.nextLine();
 
-			System.out.print("Enter assignee: ");
-			inp = in.nextLine();
-			if (! "nope".equals(inp))
-				target.assignee = inp;
+		System.out.print("Plan to: ");
+		inp5 = in.nextLine();
 
-			System.out.print("Enter reviewer: ");
-			inp = in.nextLine();
-			if (! "nope".equals(inp))
-				target.reviewer = inp;
+		System.out.print("Enter assignee: ");
+		inp6 = in.nextLine();
 
+		System.out.print("Enter reviewer: ");
+		inp7 = in.nextLine();
+
+		if (TaskController.update(target, inp1, inp2, inp3, inp4, inp5, inp6, inp7)) {
 			System.out.println("Task updated successfully.");
-		}
-		catch (Exception e) {
-			System.out.println("Something went wrong.");
+		} else {
+			System.err.println("Something went wrong.");
 		}
 	}
 
-	private static void deleteTask() {
+	private static void deleteTaskView() {
 		int id;
 
 		do {
 			System.out.print("Enter task ID: ");
-			id = in.nextInt();
-			in.nextLine();
+			id = in.nextInt(); in.nextLine();
 
-			final int idf = id;
-			if (tasks.stream().filter(t -> (idf == t.id)).findFirst().orElse(null) != null) {
-				break;
+			if (! TaskListController.deleteTask(tasks, id)) {
+				System.err.println("No task with such ID found. Please enter again.");
 			} else {
-				System.out.println("No task with such ID found.");
+				System.out.println("Task deleted successfully.");
+				break;
 			}
 		} while (true);
-
-		final int idf = id;
-		tasks.removeIf(t -> (idf == t.id));
-
-		System.out.println("Task deleted successfully.");
 	}
 
 	public static void main(String[] args) {
@@ -154,13 +146,13 @@ public class Main {
 
 				switch (choice) {
 					case 1:
-						addTask();
+						addTaskView();
 						break;
 					case 2:
-						updateTask();
+						updateTaskView();
 						break;
 					case 3:
-						deleteTask();
+						deleteTaskView();
 						break;
 					case 4:
 						showTasks();
@@ -168,10 +160,10 @@ public class Main {
 					case 5:
 						System.exit(0);
 					default:
-						System.out.println("No operation with that number found. Please enter again.");
+						System.err.println("No operation with that number found. Please enter again.");
 				}
 			} catch (NullPointerException | NumberFormatException | InputMismatchException e) {
-				System.out.println("Invalid input. Please enter again.");
+				System.err.println("Invalid input. Please enter again.");
 				in.nextLine();
 			}
 		} while (true);
