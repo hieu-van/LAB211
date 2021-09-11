@@ -7,14 +7,7 @@ public class TaskListController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M-d-yyyy");
 		LocalDate lc_date = LocalDate.parse(date, formatter);
 
-		int last_id;
-		try {
-			last_id = tasks.get(tasks.size() - 1).id;
-		} catch (IndexOutOfBoundsException e) {
-			last_id = 0;
-		}
-
-		tasks.add(new Task(last_id + 1, type, req, lc_date, from, to, a, r));
+		tasks.add(new Task(tasks.getCurrentID() + 1, type, req, lc_date, from, to, a, r));
 	}
 
 	public static void printAll(TaskList tasks) {
@@ -31,6 +24,7 @@ public class TaskListController {
 
 	public static boolean deleteTask(TaskList tasks, final int id) {
 		if (tasks.stream().filter(t -> (id == t.id)).findFirst().orElse(null) == null) {
+			// Nếu task không tồn tại, trả false
 			return false;
 		}
 
