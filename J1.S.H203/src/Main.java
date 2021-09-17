@@ -5,27 +5,35 @@ import java.util.Scanner;
 
 public class Main {
 	private static final Scanner in = new Scanner(System.in);
-	private static String inp;
+	private static String s;
 
-	private static void printReverse(String s) {
-		ArrayList<String> words = new ArrayList<>(Arrays.asList(s.split(" ")));
-		Collections.reverse(words);
-		words.forEach(w -> System.out.print(w + " "));
-		System.out.println();
-	}
-
-	public static void main(String[] args) {
+	private static void printReverse() {
 		do {
 			System.out.print("Enter a string: ");
-			inp = in.nextLine();
+			s = in.nextLine();
 
-			if (inp.equals("")) {
+			if (s.equals("")) {
 				System.err.println("Please enter a string.\n");
 			} else {
 				break;
 			}
 		} while (true);
 
-		printReverse(inp);
+		String ret = "";
+
+		ArrayList<String> words = new ArrayList<>(Arrays.asList(s.split(" ")));
+		Collections.reverse(words);
+
+		for (String w : words) {
+			ret += (w + " ");
+		}
+
+		ret = ret.trim();
+
+		System.out.println(ret + "\n");
+	}
+
+	public static void main(String[] args) {
+		printReverse();
 	}
 }

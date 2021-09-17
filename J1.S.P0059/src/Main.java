@@ -3,7 +3,6 @@ import java.nio.file.*;
 import java.util.InputMismatchException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.stream.*;
 
 public class Main {
 	private static final Scanner in = new Scanner(System.in);
