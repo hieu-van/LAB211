@@ -1,7 +1,17 @@
-import java.util.HashMap;	// Hashtable đã lỗi thời, thay thế bằng HashMap
+import java.util.ArrayList;
 
-// Trong HashMap đơn hàng, key là tên người mua, value là HashMap con
-// có key là loại quả, value là số lượng muốn mua
-public class Order extends HashMap<Fruit,Integer> {
+public class Order extends ArrayList<Fruit> {
+	public boolean addItem(Fruit f, int q) {
+		// Còn hàng không?
 
+		if ((q <= f.getQuantity()) && (q > 0)) {
+			// Trừ bớt số lượng sẵn có
+			f.setQuantity(f.getQuantity() - q);
+			this.add(f.pick(q));
+
+			return true;
+		}
+
+		return false;
+	}
 }

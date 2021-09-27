@@ -28,7 +28,7 @@ public class Main {
 			System.out.print("Enter origin of fruit: ");
 			o = in.nextLine();
 
-			FruitListController.addFruitToList(new_fruits, name, p, q, o);
+			new_fruits.addFruitToList(name, p, q, o);
 
 			System.out.println("Added new fruit.");
 
@@ -47,8 +47,8 @@ public class Main {
 			} while (true);
 		} while (inp.equals("Y"));
 
-		FruitListController.addNewFruits(fruits, new_fruits);
-		FruitListController.printNewlyCreated(new_fruits);
+		fruits.addNewFruits(new_fruits);
+		new_fruits.printNewlyCreated();
 	}
 
 	private static void updateFruitView() {
@@ -57,13 +57,13 @@ public class Main {
 		System.out.print("Enter fruit ID: ");
 		int id = in.nextInt(); in.nextLine();
 
-		target = FruitListController.findById(fruits, id);
+		target = fruits.findById(id);
 
 		if (target != null) {
 			System.out.print("Enter new quantity of this fruit: ");
 			int new_q = in.nextInt(); in.nextLine();
 
-			FruitController.update(target, new_q);
+			target.update(new_q);
 
 			System.out.println("Fruit updated.");
 		} else {
@@ -87,7 +87,7 @@ public class Main {
 	}
 
 	private static void viewOrders() {
-		OrderListController.printAll(orders);
+		orders.printAll();
 	}
 
 	private static void shopView() {
@@ -100,20 +100,20 @@ public class Main {
 				System.out.print("\nSelect a fruit by ID: ");
 				int id = in.nextInt(); in.nextLine();
 
-				Fruit target = FruitListController.findById(fruits, id);
+				Fruit target = fruits.findById(id);
 
 				if (target != null) {
-					System.out.println("You selected: " + target.name);
+					System.out.println("You selected: " + target.getName());
 
-					if (target.quantity > 0) {
+					if (target.getQuantity() > 0) {
 						do {
 							System.out.print("Enter quantity: ");
 							q = in.nextInt(); in.nextLine();
 
-							if (OrderController.addItem(new_order, target, q)) {
+							if (new_order.addItem(target, q)) {
 								break select_by_id;
 							} else {
-								System.out.println("Sorry, the quantity you requested is out of availability (" + target.quantity + ").");
+								System.out.println("Sorry, the quantity you requested is out of availability (" + target.getQuantity() + ").");
 							}
 						} while (true);
 					} else
@@ -141,7 +141,7 @@ public class Main {
 		System.out.print("\nPlease enter your name: ");
 		String c_name = in.nextLine();
 
-		OrderListController.addOrder(orders, c_name, new_order);
+		orders.addOrder(c_name, new_order);
 
 		System.out.println("Order placed.");
 	}
