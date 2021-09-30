@@ -1,7 +1,11 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.InputMismatchException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -9,7 +13,7 @@ public class Main {
 	private static final Scanner in = new Scanner(System.in);
 	private static int choice;
 
-	public static ArrayList<Person> getPerson(String path, double t_money) {
+	private static ArrayList<Person> getPerson(String path, double t_money) {
 		ArrayList<Person> people = new ArrayList();
 
 		try (Stream<String> stream = Files.lines(Paths.get(path))) {
@@ -44,11 +48,39 @@ public class Main {
 	}
 
 	private static void copyWordOneTimes(String src, String dest) {
+		HashSet<String> words = new HashSet();
+		Scanner fileSc, lineSc;
+
 		try {
-			Files.copy(Paths.get(src), Paths.get(dest));
-			System.out.println("File copied successfully.");
-		} catch (IOException err) {
-			System.err.println("Error reading or writing file!");
+			fileSc = new Scanner(new File(src));
+		} catch (FileNotFoundException e) {
+			System.err.println("Source file doesn't exist!");
+			return;
+		}
+
+		while (fileSc.hasNextLine()) {
+			lineSc = new Scanner(fileSc.nextLine());
+
+			while (lineSc.hasNext()) {
+				String s = lineSc.next().replaceAll("[^a-zA-Z]", "").toLowerCase().trim();
+
+				if (! s.equals(""))
+					words.add(s);
+			}
+		}
+
+		try (FileWriter fw = new FileWriter(dest)) {
+			words.forEach(w -> {
+				try {
+					fw.write(w + "\n");
+				} catch (IOException ex) {
+					System.err.println("Cannot write to file!");
+				}
+			});
+
+			System.out.println("File processed successfully.");
+		} catch (IOException ex) {
+			System.err.println("Cannot open file for writing!");
 		}
 	}
 
