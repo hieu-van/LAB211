@@ -4,7 +4,7 @@ import java.util.InputMismatchException;
 public class Main {
 	private static final Scanner in = new Scanner(System.in);
 	private static int choice;
-	private static String inp;
+
 	private static final TaskList tasks = new TaskList();
 
 	private static void addTaskView() {
@@ -56,13 +56,13 @@ public class Main {
 		System.out.print("Enter reviewer: ");
 		String r = in.nextLine();
 
-		TaskListController.addTask(tasks, type, req, date_str, from, to, a, r);
+		tasks.addTask(type, req, date_str, from, to, a, r);
 
 		System.out.println("Added new task.");
 	}
 
 	private static void showTasks() {
-		TaskListController.printAll(tasks);
+		tasks.printAll();
 	}
 
 	private static void updateTaskView() {
@@ -73,11 +73,13 @@ public class Main {
 			int id = in.nextInt();
 			in.nextLine();
 
-			target = tasks.stream().filter(t -> (id == t.id)).findFirst().orElse(null);
+			target = tasks.findTaskById(id);
+
 			if (target != null) {
 				break;
 			} else {
 				System.err.println("No task with such ID found.");
+				return;
 			}
 		} while (true);
 
@@ -104,7 +106,7 @@ public class Main {
 		System.out.print("Enter reviewer: ");
 		inp7 = in.nextLine();
 
-		if (TaskController.update(target, inp1, inp2, inp3, inp4, inp5, inp6, inp7)) {
+		if (target.update(inp1, inp2, inp3, inp4, inp5, inp6, inp7)) {
 			System.out.println("Task updated successfully.");
 		} else {
 			System.err.println("Something went wrong.");
@@ -114,17 +116,28 @@ public class Main {
 	private static void deleteTaskView() {
 		int id;
 
-		do {
-			System.out.print("Enter task ID: ");
-			id = in.nextInt(); in.nextLine();
+//			if (! tasks.deleteTaskById(id)) {
+//				System.err.println("No task with such ID found. Please enter again.");
+//			} else {
+//				System.out.println("Task deleted successfully.");
+//				break;
+//			}
 
-			if (! TaskListController.deleteTask(tasks, id)) {
-				System.err.println("No task with such ID found. Please enter again.");
-			} else {
-				System.out.println("Task deleted successfully.");
+		do {
+			try {
+				System.out.print("Enter task ID: ");
+				id = in.nextInt(); in.nextLine();
+
 				break;
+			} catch (NumberFormatException | InputMismatchException e) {
+				System.err.println("Invalid input. Please enter again.");
+				in.nextLine();
 			}
 		} while (true);
+
+		tasks.deleteTaskById(id);
+
+		System.out.println("Task deleted successfully.");
 	}
 
 	public static void main(String[] args) {
