@@ -91,6 +91,22 @@ public class Main {
 		tasks.printAll();
 	}
 
+	private static int enterTaskIdView() {
+		int id;
+		do {
+			try {
+				System.out.print("Enter task ID: ");
+				id = in.nextInt(); in.nextLine();
+				break;
+			} catch (InputMismatchException e) {
+				System.err.println("Invalid task ID. Please enter again.");
+				in.nextLine();
+			}
+		} while (true);
+
+		return id;
+	}
+
 	private static void updateTaskView() {
 		if (tasks.isEmpty()) {
 			System.err.println("There are no tasks.");
@@ -99,16 +115,13 @@ public class Main {
 
 		Task target;
 		do {
-			System.out.print("\nEnter task ID: ");
-			int id = in.nextInt(); in.nextLine();
-
+			int id = enterTaskIdView();
 			target = tasks.findTaskById(id);
 
 			if (target != null) {
 				break;
 			} else {
-				System.err.println("No task with such ID found.");
-				return;
+				System.err.println("No task with such ID found. Please enter again.");
 			}
 		} while (true);
 
@@ -192,24 +205,12 @@ public class Main {
 	}
 
 	private static void deleteTaskView() {
-		int id = 0;
-
 		if (tasks.isEmpty()) {
 			System.err.println("There are no tasks.");
 			return;
 		}
 
-		do {
-			try {
-				System.out.print("Enter task ID: ");
-				id = in.nextInt(); in.nextLine();
-
-				break;
-			} catch (InputMismatchException e) {
-				System.err.println("Invalid task ID. Please enter again.");
-			}
-		} while (true);
-
+		int id = enterTaskIdView();
 		if (tasks.findTaskById(id) != null) {
 			tasks.deleteTaskById(id);
 			System.out.println("Task deleted successfully.");
@@ -235,6 +236,7 @@ public class Main {
 					break;
 				} catch (InputMismatchException e) {
 					System.err.println("Invalid input. Please enter again.");
+					in.nextLine();
 				}
 			} while (true);
 

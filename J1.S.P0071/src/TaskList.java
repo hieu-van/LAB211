@@ -38,6 +38,11 @@ public class TaskList extends ArrayList<Task> {
 	}
 
 	void printAll() {
+		if (this.isEmpty()) {
+			System.err.println("There are no tasks.");
+			return;
+		}
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
 		System.out.println("---------------------------- Task (in descending order) ----------------------------");

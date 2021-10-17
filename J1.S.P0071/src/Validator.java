@@ -54,8 +54,12 @@ public class Validator {
 		} else if (task != null && from.equals("nope") && to.equals("nope")) {
 			return true;
 		} else {
-			timeFrom = Float.parseFloat(from);
-			timeTo = Float.parseFloat(to);
+			try {
+				timeFrom = Float.parseFloat(from);
+				timeTo = Float.parseFloat(to);
+			} catch (NumberFormatException e) {
+				return false;
+			}
 		}
 
 		return timeFrom < timeTo && 8 <= timeFrom && timeTo <= 17.5;
