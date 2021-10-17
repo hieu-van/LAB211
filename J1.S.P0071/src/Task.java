@@ -11,71 +11,43 @@ public class Task {
 	private LocalDate date;
 	private String reqName, assignee, reviewer;
 
+	private static void initializeTypes() {
+		typeMap.put(1, "Code");
+		typeMap.put(2, "Test");
+		typeMap.put(3, "Design");
+		typeMap.put(4, "Review");
+	}
+
 	public int getId() {
 		return id;
 	}
 
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
+	String getTaskType() {
+		return typeMap.get(type);
 	}
 
 	public float getFrom() {
 		return from;
 	}
 
-	public void setFrom(float from) {
-		this.from = from;
-	}
-
 	public float getTo() {
 		return to;
-	}
-
-	public void setTo(float to) {
-		this.to = to;
 	}
 
 	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
-
 	public String getReqName() {
 		return reqName;
-	}
-
-	public void setReqName(String reqName) {
-		this.reqName = reqName;
 	}
 
 	public String getAssignee() {
 		return assignee;
 	}
 
-	public void setAssignee(String assignee) {
-		this.assignee = assignee;
-	}
-
 	public String getReviewer() {
 		return reviewer;
-	}
-
-	public void setReviewer(String reviewer) {
-		this.reviewer = reviewer;
-	}
-
-	private static void initializeTypes() {
-		typeMap.put(1, "Code");
-		typeMap.put(2, "Test");
-		typeMap.put(3, "Design");
-		typeMap.put(4, "Review");
 	}
 
 	// Constructor
@@ -86,7 +58,6 @@ public class Task {
 			float from, float to,
 			String assignee,
 			String reviewer) {
-
 		initializeTypes();
 
 		this.id = id;
@@ -97,10 +68,6 @@ public class Task {
 		this.to = to;
 		this.assignee = assignee;
 		this.reviewer = reviewer;
-	}
-
-	String getTaskType() {
-		return typeMap.get(type);
 	}
 
 	// Cập nhật công việc hiện tại với dữ liệu mới.
