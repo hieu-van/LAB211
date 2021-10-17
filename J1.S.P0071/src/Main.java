@@ -8,55 +8,81 @@ public class Main {
 	private static final TaskList tasks = new TaskList();
 
 	private static void addTaskView() {
-		int type;
-		String req, date_str;
-		float from, to;
+		String type, reqName, dateStr, from, to, assignee, reviewer;
 
+		// Nhập vào mã loại công việc
 		do {
-			try {
-				System.out.print("Enter task type ID: ");
-				type = in.nextInt();
+			System.out.print("Enter task type ID: ");
+			type = in.nextLine();
+
+			if (Validator.validateTaskType(null, type))
 				break;
-			} catch (InputMismatchException e) {
-				System.err.println("Invalid number!");
-			}
-			in.nextLine();
+			else
+				System.err.println("Invalid task type!");
 		} while (true);
 
-		System.out.print("Enter requirement name: ");
-		req = in.nextLine();
-
-		System.out.print("Enter date (M-d-yyyy): ");
-		date_str = in.nextLine();
-
+		// Nhập vào tên
 		do {
-			try {
-				System.out.print("Plan from: ");
-				from = in.nextFloat();
+			System.out.print("Enter requirement name: ");
+			reqName = in.nextLine();
+
+			if (Validator.validateString(null, reqName))
 				break;
-			} catch (InputMismatchException e) {
-				System.err.println("Invalid number!");
-			}
-			in.nextLine();
+			else
+				System.err.println("Requirement name must not be empty!");
 		} while (true);
 
+		// Nhập vào ngày giao việc
 		do {
-			try {
-				System.out.print("Plan to: ");
-				to = in.nextFloat(); in.nextLine();
+			System.out.print("Enter date (M-d-yyyy): ");
+			dateStr = in.nextLine();
+
+			if (Validator.validateDate(null, dateStr)) {
 				break;
-			} catch (InputMismatchException e) {
-				System.err.println("Invalid number!");
+			} else
+				System.err.println("Invalid date! Please enter again.");
+		} while (true);
+
+		// Nhập vào thời gian
+		do {
+			System.out.print("Plan from: ");
+			from = in.nextLine();
+
+			System.out.print("Plan to: ");
+			to = in.nextLine();
+
+			// Kiểm tra thời gian nhập vào có hợp lệ không
+			if (! Validator.validateTime(null, from, to)) {
+				System.err.println("Invalid time! Please enter again.");
+			} else {
+				break;
 			}
 		} while (true);
 
-		System.out.print("Enter assignee: ");
-		String a = in.nextLine();
+		// Nhập vào người được giao việc
+		do {
+			System.out.print("Enter assignee: ");
+			assignee = in.nextLine();
 
-		System.out.print("Enter reviewer: ");
-		String r = in.nextLine();
+			if (Validator.validateString(null, assignee))
+				break;
+			else
+				System.err.println("Assignee must not be empty!");
+		} while (true);
 
-		tasks.addTask(type, req, date_str, from, to, a, r);
+		// Nhập vào người đánh giá việc
+		do {
+			System.out.print("Enter reviewer: ");
+			reviewer = in.nextLine();
+
+			if (Validator.validateString(null, reviewer))
+				break;
+			else
+				System.err.println("Reviewer must not be empty!");
+		} while (true);
+
+		// Thêm công việc vừa tạo vào danh sách các công việc
+		tasks.addTask(type, reqName, dateStr, from, to, assignee, reviewer);
 
 		System.out.println("Added new task.");
 	}
@@ -66,12 +92,15 @@ public class Main {
 	}
 
 	private static void updateTaskView() {
-		Task target;
+		if (tasks.isEmpty()) {
+			System.err.println("There are no tasks.");
+			return;
+		}
 
+		Task target;
 		do {
-			System.out.print("Enter task ID: ");
-			int id = in.nextInt();
-			in.nextLine();
+			System.out.print("\nEnter task ID: ");
+			int id = in.nextInt(); in.nextLine();
 
 			target = tasks.findTaskById(id);
 
@@ -83,45 +112,92 @@ public class Main {
 			}
 		} while (true);
 
-		String inp1, inp2, inp3, inp4, inp5, inp6, inp7;
+		// Các biến dùng để lưu dữ liệu thay thế
+		String type, reqName, dateStr, from, to, assignee, reviewer;
 
-		System.out.print("Enter task type ID: ");
-		inp1 = in.nextLine();
+		// Nhập vào mã loại công việc
+		do {
+			System.out.print("Enter task type ID: ");
+			type = in.nextLine();
 
-		System.out.print("Enter requirement name: ");
-		inp2 = in.nextLine();
+			if (Validator.validateTaskType(target, type))
+				break;
+			else
+				System.err.println("Invalid task type!");
+		} while (true);
 
-		System.out.print("Enter date (M-d-yyyy): ");
-		inp3 = in.nextLine();
+		// Nhập vào tên
+		do {
+			System.out.print("Enter requirement name: ");
+			reqName = in.nextLine();
 
-		System.out.print("Plan from: ");
-		inp4 = in.nextLine();
+			if (Validator.validateString(target, reqName))
+				break;
+			else
+				System.err.println("Requirement name must not be empty!");
+		} while (true);
 
-		System.out.print("Plan to: ");
-		inp5 = in.nextLine();
+		// Nhập vào ngày giao việc
+		do {
+			System.out.print("Enter date (M-d-yyyy): ");
+			dateStr = in.nextLine();
 
-		System.out.print("Enter assignee: ");
-		inp6 = in.nextLine();
+			if (Validator.validateDate(target, dateStr)) {
+				break;
+			} else
+				System.err.println("Invalid date! Please enter again.");
+		} while (true);
 
-		System.out.print("Enter reviewer: ");
-		inp7 = in.nextLine();
+		// Nhập vào thời gian
+		do {
+			System.out.print("Plan from: ");
+			from = in.nextLine();
 
-		if (target.update(inp1, inp2, inp3, inp4, inp5, inp6, inp7)) {
-			System.out.println("Task updated successfully.");
-		} else {
-			System.err.println("Something went wrong.");
-		}
+			System.out.print("Plan to: ");
+			to = in.nextLine();
+
+			// Kiểm tra thời gian nhập vào có hợp lệ không
+			if (! Validator.validateTime(target, from, to)) {
+				System.err.println("Invalid time! Please enter again.");
+			} else {
+				break;
+			}
+		} while (true);
+
+		// Nhập vào người được giao việc
+		do {
+			System.out.print("Enter assignee: ");
+			assignee = in.nextLine();
+
+			if (Validator.validateString(target, assignee))
+				break;
+			else
+				System.err.println("Assignee must not be empty!");
+		} while (true);
+
+		// Nhập vào người đánh giá việc
+		do {
+			System.out.print("Enter reviewer: ");
+			reviewer = in.nextLine();
+
+			if (Validator.validateString(target, reviewer))
+				break;
+			else
+				System.err.println("Reviewer must not be empty!");
+		} while (true);
+
+		// Cập nhật
+		target.update(type, reqName, dateStr, from, to, assignee, reviewer);
+		System.out.println("Task updated successfully!");
 	}
 
 	private static void deleteTaskView() {
-		int id;
+		int id = 0;
 
-//			if (! tasks.deleteTaskById(id)) {
-//				System.err.println("No task with such ID found. Please enter again.");
-//			} else {
-//				System.out.println("Task deleted successfully.");
-//				break;
-//			}
+		if (tasks.isEmpty()) {
+			System.err.println("There are no tasks.");
+			return;
+		}
 
 		do {
 			try {
@@ -129,15 +205,17 @@ public class Main {
 				id = in.nextInt(); in.nextLine();
 
 				break;
-			} catch (NumberFormatException | InputMismatchException e) {
-				System.err.println("Invalid input. Please enter again.");
-				in.nextLine();
+			} catch (InputMismatchException e) {
+				System.err.println("Invalid task ID. Please enter again.");
 			}
 		} while (true);
 
-		tasks.deleteTaskById(id);
-
-		System.out.println("Task deleted successfully.");
+		if (tasks.findTaskById(id) != null) {
+			tasks.deleteTaskById(id);
+			System.out.println("Task deleted successfully.");
+		} else {
+			System.err.println("No task with such ID found!");
+		}
 	}
 
 	public static void main(String[] args) {
@@ -148,33 +226,35 @@ public class Main {
 		System.out.println("4. Display task");
 		System.out.println("5. Exit");
 
+		// Vòng lặp chính
 		do {
-			try {
-				System.out.print("\nSelect an operation: ");
-				choice = in.nextInt();
-				in.nextLine();
-
-				switch (choice) {
-					case 1:
-						addTaskView();
-						break;
-					case 2:
-						updateTaskView();
-						break;
-					case 3:
-						deleteTaskView();
-						break;
-					case 4:
-						showTasks();
-						break;
-					case 5:
-						System.exit(0);
-					default:
-						System.err.println("No operation with that number found. Please enter again.");
+			do {
+				try {
+					System.out.print("\nSelect an operation: ");
+					choice = in.nextInt(); in.nextLine();
+					break;
+				} catch (InputMismatchException e) {
+					System.err.println("Invalid input. Please enter again.");
 				}
-			} catch (NullPointerException | NumberFormatException | InputMismatchException e) {
-				System.err.println("Invalid input. Please enter again.");
-				in.nextLine();
+			} while (true);
+
+			switch (choice) {
+				case 1:
+					addTaskView();
+					break;
+				case 2:
+					updateTaskView();
+					break;
+				case 3:
+					deleteTaskView();
+					break;
+				case 4:
+					showTasks();
+					break;
+				case 5:
+					System.exit(0);
+				default:
+					System.err.println("No operation with that number found. Please enter again.");
 			}
 		} while (true);
 	}

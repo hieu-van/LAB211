@@ -3,48 +3,75 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class TaskList extends ArrayList<Task> {
-	public int getCurrentID() {
-		int last_id;
+	int getLastID() {
+		// ID của công việc được thêm vào cuối cùng trong danh sách
+		int lastId;
+
 		try {
-			last_id = this.get(this.size() - 1).getId();
+			lastId = this.get(this.size() - 1).getId();
 		} catch (IndexOutOfBoundsException e) {
-			last_id = 0;
+			// Trường hợp này là trong DS không có phần tử nào.
+			// Khi đó đặt ID cuối cùng là 0.
+			lastId = 0;
 		}
 
-		return last_id;
+		return lastId;
 	}
 
-	public void addTask(int type, String req, String date, float from, float to, String a, String r) {
+	void addTask(String typeIdStr,
+			String reqName,
+			String dateStr,
+			String fromStr, String toStr,
+			String asnee,
+			String rev) {
+		int type = Integer.parseInt(typeIdStr);
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M-d-yyyy");
-		LocalDate lc_date = LocalDate.parse(date, formatter);
+		LocalDate dateObj = LocalDate.parse(dateStr, formatter);
 
-		this.add(new Task(this.getCurrentID() + 1, type, req, lc_date, from, to, a, r));
+		float timeFrom = Float.parseFloat(fromStr);
+		float timeTo = Float.parseFloat(toStr);
+
+		int newTaskId = this.getLastID() + 1;
+		Task newTask = new Task(newTaskId, type, reqName, dateObj, timeFrom, timeTo, asnee, rev);
+		this.add(newTask);
 	}
 
-	public void printAll() {
+	void printAll() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
 		System.out.println("---------------------------- Task (in descending order) ----------------------------");
-		System.out.println("ID\tName\tTask Type\tDate\tTime\tAssignee\tReviewer");
+
+		System.out.printf("%-15s %-15s %-15s %-15s %-15s %-15s %-15s\n",
+			"ID",
+			"Name",
+			"Task Type",
+			"Date",
+			"Time",
+			"Assignee",
+			"Reviewer"
+		);
 
 		for (int i = this.size() - 1; i >= 0; --i) {
 			Task t = this.get(i);
-			System.out.printf("%d\t%s\t%s\t%s\t%.1f\t%s\t%s\n", t.getId(), t.getReqName(), t.getTaskType(), t.getDate().format(formatter), (t.getTo() - t.getFrom()), t.getAssignee(), t.getReviewer());
+
+			System.out.printf("%-15s %-15s %-15s %-15s %-15.1f %-15s %-15s\n",
+				t.getId(),
+				t.getReqName(),
+				t.getTaskType(),
+				t.getDate().format(formatter),
+				(t.getTo() - t.getFrom()),
+				t.getAssignee(),
+				t.getReviewer()
+			);
 		}
 	}
 
-	public void deleteTaskById(final int id) {
-//		if (this.stream().filter(t -> (id == t.getId())).findFirst().orElse(null) == null) {
-//			// Nếu task không tồn tại, trả false
-//			return false;
-//		}
-
+	void deleteTaskById(final int id) {
 		this.removeIf(t -> (id == t.getId()));
-
-//		return true;
 	}
 
-	public Task findTaskById(final int id) {
+	Task findTaskById(final int id) {
 		return this.stream().filter(t -> (id == t.getId())).findFirst().orElse(null);
 	}
 }

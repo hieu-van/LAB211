@@ -79,7 +79,14 @@ public class Task {
 	}
 
 	// Constructor
-	public Task(int id, int type, String reqName, LocalDate date, float from, float to, String assignee, String reviewer) {
+	Task(int id,
+			int type,
+			String reqName,
+			LocalDate date,
+			float from, float to,
+			String assignee,
+			String reviewer) {
+
 		initializeTypes();
 
 		this.id = id;
@@ -92,39 +99,39 @@ public class Task {
 		this.reviewer = reviewer;
 	}
 
-	public String getTaskType() {
+	String getTaskType() {
 		return typeMap.get(type);
 	}
 
-	public boolean update(String inp1, String inp2, String inp3, String inp4, String inp5, String inp6, String inp7) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M-d-yyyy");
+	// Cập nhật công việc hiện tại với dữ liệu mới.
+	// Các dữ liệu mới này được đảm bảo là hợp lệ.
+	void update(String newTypeId,
+			String newReqName,
+			String newDateStr,
+			String newFrom, String newTo,
+			String newAss,
+			String newRev) {
+		if (! "nope".equals(newTypeId))
+			this.type = Integer.parseInt(newTypeId);
 
-		try {
-			if (! "nope".equals(inp1))
-				this.type = Integer.parseInt(inp1);
+		if (! "nope".equals(newReqName))
+			this.reqName = newReqName;
 
-			if (! "nope".equals(inp2))
-				this.reqName = inp2;
-
-			if (! "nope".equals(inp3))
-				this.date = LocalDate.parse(inp3, formatter);
-
-			if (! "nope".equals(inp4))
-				this.from = Float.parseFloat(inp4);
-
-			if (! "nope".equals(inp5))
-				this.to = Float.parseFloat(inp5);
-
-			if (! "nope".equals(inp6))
-				this.assignee = inp6;
-
-			if (! "nope".equals(inp7))
-				this.reviewer = inp7;
-
-			return true;
+		if (! "nope".equals(newDateStr)) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M-d-yyyy");
+			this.date = LocalDate.parse(newDateStr, formatter);
 		}
-		catch (Exception e) {
-			return false;
-		}
+
+		if (! "nope".equals(newFrom))
+			this.from = Float.parseFloat(newFrom);
+
+		if (! "nope".equals(newTo))
+			this.to = Float.parseFloat(newTo);
+
+		if (! "nope".equals(newAss))
+			this.assignee = newAss;
+
+		if (! "nope".equals(newRev))
+			this.reviewer = newRev;
 	}
 }
