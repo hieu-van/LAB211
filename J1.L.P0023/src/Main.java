@@ -3,7 +3,6 @@ import java.util.Scanner;
 
 public class Main {
 	private static final Scanner in = new Scanner(System.in);
-	private static int choice;
 	private static String inp;
 
 	// Các biến chứa dữ liệu
@@ -38,7 +37,6 @@ public class Main {
 
 				switch (inp) {
 					case "Y":
-						break input_loop;
 					case "N":
 						break input_loop;
 					default:
@@ -157,26 +155,16 @@ public class Main {
 		do {
 			try {
 				System.out.print("\nSelect an operation: ");
-				choice = in.nextInt();
+				int choice = in.nextInt();
 				in.nextLine();
 
 				switch (choice) {
-					case 1:
-						createFruitView();
-						break;
-					case 2:
-						updateFruitView();
-						break;
-					case 3:
-						viewOrders();
-						break;
-					case 4:
-						shopView();
-						break;
-					case 5:
-						System.exit(0);
-					default:
-						System.err.println("No operation with that number found. Please enter again.");
+					case 1 -> createFruitView();
+					case 2 -> updateFruitView();
+					case 3 -> viewOrders();
+					case 4 -> shopView();
+					case 5 -> System.exit(0);
+					default -> System.err.println("No operation with that number found. Please enter again.");
 				}
 			} catch (NullPointerException | NumberFormatException | InputMismatchException e) {
 				System.err.println("Invalid input. Please enter again.");

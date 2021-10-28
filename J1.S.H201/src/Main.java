@@ -1,12 +1,11 @@
 import java.util.Scanner;
 
 public class Main {
-	private Employee emp = null;
 	private DiscountBill disBill = null;
 
 	private void seed() {
 		// Create a new discount bill
-		emp = new Employee("Employee 69");
+		Employee emp = new Employee("Employee 69");
 		disBill = new DiscountBill(emp, true);
 
 		// Create some items and put them in the bill
@@ -30,7 +29,7 @@ public class Main {
 		final Scanner in = new Scanner(System.in);
 
 		do {
-			int o = -1;
+			int o;
 			do {
 				System.out.print("\nChoose an option: ");
 				try {
