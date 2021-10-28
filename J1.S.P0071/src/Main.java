@@ -7,6 +7,24 @@ public class Main {
 
 	private static final TaskList tasks = new TaskList();
 
+	// View nhập ID của công việc, dùng cho các hàm cập nhật & xóa công việc
+	private static int enterTaskIdView() {
+		int id;
+		do {
+			try {
+				System.out.print("Enter task ID: ");
+				id = in.nextInt(); in.nextLine();
+				break;
+			} catch (InputMismatchException e) {
+				System.err.println("Invalid task ID. Please enter again.");
+				in.nextLine();
+			}
+		} while (true);
+
+		return id;
+	}
+
+	// View thêm công việc mới
 	private static void addTaskView() {
 		String type, reqName, dateStr, from, to, assignee, reviewer;
 
@@ -87,26 +105,7 @@ public class Main {
 		System.out.println("Added new task.");
 	}
 
-	private static void showTasks() {
-		tasks.printAll();
-	}
-
-	private static int enterTaskIdView() {
-		int id;
-		do {
-			try {
-				System.out.print("Enter task ID: ");
-				id = in.nextInt(); in.nextLine();
-				break;
-			} catch (InputMismatchException e) {
-				System.err.println("Invalid task ID. Please enter again.");
-				in.nextLine();
-			}
-		} while (true);
-
-		return id;
-	}
-
+	// View cập nhật công việc có sẵn trong danh sách
 	private static void updateTaskView() {
 		if (tasks.isEmpty()) {
 			System.err.println("There are no tasks.");
@@ -204,6 +203,7 @@ public class Main {
 		System.out.println("Task updated successfully!");
 	}
 
+	// View xóa công việc có trong danh sách
 	private static void deleteTaskView() {
 		if (tasks.isEmpty()) {
 			System.err.println("There are no tasks.");
@@ -217,6 +217,11 @@ public class Main {
 		} else {
 			System.err.println("No task with such ID found!");
 		}
+	}
+
+	// View in ra các công việc
+	private static void showTasks() {
+		tasks.printAll();
 	}
 
 	public static void main(String[] args) {

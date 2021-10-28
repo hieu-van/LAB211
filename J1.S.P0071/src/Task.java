@@ -51,13 +51,13 @@ public class Task {
 	}
 
 	// Constructor
-	Task(int id,
-			int type,
-			String reqName,
-			LocalDate date,
-			float from, float to,
-			String assignee,
-			String reviewer) {
+	Task(final int id,
+			final int type,
+			final String reqName,
+			final LocalDate date,
+			final float from, final float to,
+			final String assignee,
+			final String reviewer) {
 		initializeTypes();
 
 		this.id = id;
@@ -72,12 +72,12 @@ public class Task {
 
 	// Cập nhật công việc hiện tại với dữ liệu mới.
 	// Các dữ liệu mới này được đảm bảo là hợp lệ.
-	void update(String newTypeId,
-			String newReqName,
-			String newDateStr,
-			String newFrom, String newTo,
-			String newAss,
-			String newRev) {
+	void update(final String newTypeId,
+			final String newReqName,
+			final String newDateStr,
+			final String newFrom, final String newTo,
+			final String newAss,
+			final String newRev) {
 		if (! "nope".equals(newTypeId))
 			this.type = Integer.parseInt(newTypeId);
 

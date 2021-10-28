@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class Validator {
+	// Hàm kiểm tra mã của loại công việc
 	static boolean validateTaskType(Task task, String typeId) {
 		if (task != null && typeId.equals("nope")) {
 			return true;
@@ -16,7 +17,7 @@ public class Validator {
 				return false;
 			}
 
-			return type >= 1 && type <= 4;
+			return (type >= 1 && type <= 4);
 		}
 	}
 
@@ -29,6 +30,7 @@ public class Validator {
 			return ! field.equals("");
 	}
 
+	// Hàm kiểm tra ngày nhập vào
 	static boolean validateDate(Task task, String dateString) {
 		if (! (task != null && dateString.equals("nope"))) {
 			try {
@@ -42,6 +44,7 @@ public class Validator {
 		return true;
 	}
 
+	// Hàm kiểm tra thời gian bắt đầu & kết thúc công việc
 	static boolean validateTime(Task task, String from, String to) {
 		double timeFrom, timeTo;
 
@@ -62,6 +65,6 @@ public class Validator {
 			}
 		}
 
-		return timeFrom < timeTo && 8 <= timeFrom && timeTo <= 17.5;
+		return (timeFrom < timeTo && 8 <= timeFrom && timeTo <= 17.5);
 	}
 }

@@ -18,12 +18,12 @@ public class TaskList extends ArrayList<Task> {
 		return lastId;
 	}
 
-	void addTask(String typeIdStr,
-			String reqName,
-			String dateStr,
-			String fromStr, String toStr,
-			String asnee,
-			String rev) {
+	void addTask(final String typeIdStr,
+			final String reqName,
+			final String dateStr,
+			final String fromStr, final String toStr,
+			final String asnee,
+			final String rev) {
 		int type = Integer.parseInt(typeIdStr);
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M-d-yyyy");
