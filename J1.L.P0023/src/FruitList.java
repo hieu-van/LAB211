@@ -24,11 +24,6 @@ public class FruitList extends ArrayList<Fruit> {
 		this.addAll(new_fruits);
 	}
 
-	public void printAll() {
-		System.out.println("List of fruits:\nItem\tFruit name\tOrigin\tPrice");
-		this.forEach(f -> System.out.printf("%d\t%s\t%s\t%d$\n", f.getId(), f.getName(), f.getOrigin(), f.getPrice()));
-	}
-
 	public void printNewlyCreated() {
 		System.out.println("\nList of fruits created:\nID\tName\tPrice\tQuantity\tOrigin");
 		this.forEach(f -> System.out.printf("%d\t%s\t%d$\t%d\t%s\n", f.getId(), f.getName(), f.getPrice(), f.getQuantity(), f.getOrigin()));

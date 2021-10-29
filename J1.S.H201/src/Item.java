@@ -1,5 +1,5 @@
 public class Item {
-	public String name;
+	private String name;
 	private double price, dis;
 
 	public Item(String name, double price, double dis) {
@@ -14,5 +14,9 @@ public class Item {
 
 	public double getDiscount() {
 		return dis;
+	}
+
+	public String getName() {
+		return name;
 	}
 }

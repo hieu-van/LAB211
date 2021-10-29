@@ -3,7 +3,6 @@ import java.util.InputMismatchException;
 
 public class Main {
 	private static final Scanner in = new Scanner(System.in);
-	private static int choice;
 
 	private static final TaskList tasks = new TaskList();
 
@@ -234,6 +233,7 @@ public class Main {
 
 		// Vòng lặp chính
 		do {
+			int choice;
 			do {
 				try {
 					System.out.print("\nSelect an operation: ");

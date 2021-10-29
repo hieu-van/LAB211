@@ -10,6 +10,7 @@ public class GroceryBill {
 
 	public void add(Item i) {
 		items.add(i);
+		System.out.printf("Added %s, price: %f, discount rate: %f.\n", i.getName(), i.getPrice(), i.getDiscount());
 	}
 
 	public double getTotal() {
@@ -25,7 +26,7 @@ public class GroceryBill {
 	public void printReceipt() {
 		System.out.println("List of items:");
 		items.forEach(i -> {
-			System.out.println(i.name + "\t" + i.getPrice());
+			System.out.printf("%s %20s\n", i.getName(), i.getPrice());
 		});
 	}
 }

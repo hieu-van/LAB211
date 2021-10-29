@@ -159,12 +159,23 @@ public class Main {
 				in.nextLine();
 
 				switch (choice) {
-					case 1 -> createFruitView();
-					case 2 -> updateFruitView();
-					case 3 -> viewOrders();
-					case 4 -> shopView();
-					case 5 -> System.exit(0);
-					default -> System.err.println("No operation with that number found. Please enter again.");
+					case 1:
+						createFruitView();
+						break;
+					case 2:
+						updateFruitView();
+						break;
+					case 3:
+						viewOrders();
+						break;
+					case 4:
+						shopView();
+						break;
+					case 5:
+						System.exit(0);
+						break;
+					default:
+						System.err.println("No operation with that number found. Please enter again.");
 				}
 			} catch (NullPointerException | NumberFormatException | InputMismatchException e) {
 				System.err.println("Invalid input. Please enter again.");
